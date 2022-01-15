@@ -10,6 +10,7 @@ numpy = "*"
 notebook = "*"
 matplotlib = "*"
 highway-env = "*"
+gym-maze = {editable = true, git = "https://github.com/MattChanTK/gym-maze.git"}
 
 [dev-packages]
 

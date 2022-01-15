@@ -9,7 +9,7 @@ from src.agents.agent import Agent
 class QLearningAgent(Agent):
     def __init__(self, env, min_epsilon: float = 0.001, min_learning_rate: float = 0.2,
                  discount_factor: float = 0.99):
-        super().__init__(env.env)
+        super().__init__(env)
 
         self.min_epsilon: float = min_epsilon
         self.min_learning_rate: float = min_learning_rate

@@ -1,16 +1,10 @@
-import matplotlib.pyplot as plt
+import gym_maze
+from src.games.maze_game import MazeGame
 
-import gym_maze.gym_maze
-from src.agents.q_learning_agent import QLearningAgent
-from src.learnable_environment import LearnableEnvironment
-
-env = LearnableEnvironment(
+game = MazeGame(
     env_name='maze-random-10x10-plus-v0'
 )
-agent = QLearningAgent(env)
-
-env.run(
-    agent,
+game.run(
     verbose=True
 )
-env.test(agent)
+game.test()

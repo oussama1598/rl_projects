@@ -1,16 +1,18 @@
 from time import sleep
 
-import gym
 import numpy as np
 
-from src.agents.agent import Agent
+from src.agents.q_learning_agent import QLearningAgent
+from src.games.game import Game
 
 
-class LearnableEnvironment:
+class MazeGame(Game):
     def __init__(self, env_name: str):
-        self.env = gym.make(env_name)
+        super().__init__(env_name)
 
-    def run(self, agent: Agent,
+        self.agent = QLearningAgent(self.env)
+
+    def run(self,
             num_episodes: int = 150,
             max_epochs: int = 1000,
             verbose: bool = False
@@ -22,11 +24,11 @@ class LearnableEnvironment:
             state, total_reward = np.array([*obv]), 0
 
             for t in range(max_epochs):
-                action = agent.get_action(state)
+                action = self.agent.get_action(state)
                 new_state, reward, done, _ = self.env.step(action)
                 total_reward += reward
 
-                agent.train(state, action, new_state, reward)
+                self.agent.train(state, action, new_state, reward)
 
                 state = np.array([*new_state])
 
@@ -36,9 +38,9 @@ class LearnableEnvironment:
 
                     break
 
-            agent.training_done(episode, total_reward)
+            self.agent.training_done(episode, total_reward)
 
-    def test(self, agent: Agent,
+    def test(self,
              num_episodes: int = 1,
              max_epochs: int = 10
              ):
@@ -49,7 +51,7 @@ class LearnableEnvironment:
 
             for t in range(max_epochs):
                 sleep(1)
-                action = agent.get_action(state)
+                action = self.agent.get_action(state)
                 new_state, reward, done, _ = self.env.step(action)
 
                 self.env.render()

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0c8afdd43729486f0198f6160c5fe837137d97b6961d58c880fe9361e972839c"
+            "sha256": "11fbcee8790b6a83d4445a3affc291293f57be00820ce6a65b4656d5a19e08d2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -245,14 +245,17 @@
             "version": "==4.28.5"
         },
         "gym": {
-            "extras": [
-                "box2d"
-            ],
+            "extras": [],
             "hashes": [
                 "sha256:0fd1ce165c754b4017e37a617b097c032b8c3feb8a0394ccc8777c7c50dddff3"
             ],
             "index": "pypi",
             "version": "==0.21.0"
+        },
+        "gym-maze": {
+            "editable": true,
+            "git": "https://github.com/MattChanTK/gym-maze.git",
+            "ref": "83176811b49b5538a6213520612f44fb1bc49114"
         },
         "highway-env": {
             "hashes": [
@@ -957,10 +960,10 @@
         },
         "stack-data": {
             "hashes": [
-                "sha256:5cb2aff8164a81901160078ea2f5e39de978f08c96ac69e552a5c5345f892a81",
-                "sha256:e3f4e54cde03af62e9afd680b3407d38f2e4f3d0e23c3d53371c088c9bea299d"
+                "sha256:02cc0683cbc445ae4ca8c4e3a0e58cb1df59f252efb0aa016b34804a707cf9bc",
+                "sha256:7769ed2482ce0030e00175dd1bf4ef1e873603b6ab61cd3da443b410e64e9477"
             ],
-            "version": "==0.1.3"
+            "version": "==0.1.4"
         },
         "terminado": {
             "hashes": [
