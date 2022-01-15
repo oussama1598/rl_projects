@@ -34,9 +34,6 @@ class DeepQLearningAgent(Agent):
 
         self.memory = deque(maxlen=2000)
         self.model = self._build_model()
-        self.target_model = self._build_model()
-
-        self.target_model.set_weights(self.model.weights)
 
         self.rewards = []
         self.epsilons = []
@@ -65,16 +62,17 @@ class DeepQLearningAgent(Agent):
     def train(self, state: np.array, action: int, new_state: np.array, reward: int, done: bool):
         self.memory.append((state, action, reward, new_state, done))
 
+    def training_done(self, episode: int, total_reward: float):
         if len(self.memory) < 32:
             return
 
         sample_batch = random.sample(self.memory, 32)
 
         current_states = np.array([frame[0] for frame in sample_batch])
-        current_qs = self.model.predict(np.array(current_states))
+        current_qs = self.model.predict(current_states)
 
         new_states = np.array([frame[3] for frame in sample_batch])
-        new_qs = self.target_model.predict(np.array(new_states))
+        new_qs = self.model.predict(new_states)
 
         training_X = []
         training_Y = []
@@ -83,22 +81,15 @@ class DeepQLearningAgent(Agent):
             target = reward
 
             if not done:
-                target = reward + self.discount_factor * np.amax(new_qs)
+                target = reward + self.discount_factor * np.amax(new_qs[i][0])
 
-            current_q = current_qs[i]
-            current_q[0][action] = target
+            target_q = current_qs[i]
+            target_q[0][action] = target
 
             training_X.append(state)
-            training_Y.append(current_q)
+            training_Y.append(target_q)
 
         self.model.fit(np.array(training_X), np.array(training_Y), batch_size=32, verbose=False)
-
-    def training_done(self, episode: int, total_reward: float):
-        self.target_update_counter += 1
-
-        if self.target_update_counter > 5:
-            self.target_model.set_weights(self.model.get_weights())
-            self.target_update_counter = 0
 
         if self.epsilon > self.epsilon:
             self.epsilon *= self.decay
