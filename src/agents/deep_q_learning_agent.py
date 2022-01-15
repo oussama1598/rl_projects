@@ -40,7 +40,7 @@ class DeepQLearningAgent(Agent):
 
     def _build_model(self):
         model = Sequential()
-        model.add(Dense(24, input_shape=(None, self.state_size), activation='relu'))
+        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
         model.add(Dense(24, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse', optimizer=Adam(learning_rate=self.learning_rate))
@@ -55,7 +55,7 @@ class DeepQLearningAgent(Agent):
 
     def get_action(self, state: np.array):
         if random.uniform(0, 1) > self.epsilon:
-            return np.argmax(self.model.predict(np.array([state])).flatten())
+            return np.argmax(self.model.predict(state)[0])
 
         return self.env.action_space.sample()
 
@@ -68,28 +68,16 @@ class DeepQLearningAgent(Agent):
 
         sample_batch = random.sample(self.memory, 32)
 
-        current_states = np.array([frame[0] for frame in sample_batch])
-        current_qs = self.model.predict(current_states)
-
-        new_states = np.array([frame[3] for frame in sample_batch])
-        new_qs = self.model.predict(new_states)
-
-        training_X = []
-        training_Y = []
-
-        for i, (state, action, reward, next_state, done) in enumerate(sample_batch):
+        for state, action, reward, next_state, done in enumerate(sample_batch):
             target = reward
 
             if not done:
-                target = reward + self.discount_factor * np.amax(new_qs[i][0])
+                target = reward + self.discount_factor * np.amax(self.model.predict(next_state)[0])
 
-            target_q = current_qs[i]
-            target_q[0][action] = target
+            target_f = self.model.predict(state)
+            target_f[0][action] = target
 
-            training_X.append(state)
-            training_Y.append(target_q)
-
-        self.model.fit(np.array(training_X), np.array(training_Y), batch_size=32, verbose=False)
+            self.model.fit(state, target_f, epochs=1, verbose=0)
 
         if self.epsilon > self.epsilon:
             self.epsilon *= self.decay
