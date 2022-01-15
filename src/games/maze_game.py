@@ -7,8 +7,8 @@ from src.games.game import Game
 
 
 class MazeGame(Game):
-    def __init__(self, env_name: str):
-        super().__init__(env_name)
+    def __init__(self):
+        super().__init__('maze-random-10x10-plus-v0')
 
         self.agent = QLearningAgent(self.env)
 

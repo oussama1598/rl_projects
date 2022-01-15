@@ -1,10 +1,11 @@
-import gym_maze
-from src.games.maze_game import MazeGame
+# import gym_maze
 
-game = MazeGame(
-    env_name='maze-random-10x10-plus-v0'
-)
+from src.games.cartpole_game import CartpoleGame
+
+# from src.games.maze_game import MazeGame
+
+game = CartpoleGame()
 game.run(
     verbose=True
 )
-game.test()
+# game.test()
