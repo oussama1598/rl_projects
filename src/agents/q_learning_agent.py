@@ -41,13 +41,13 @@ class QLearningAgent(Agent):
 
         return int(np.argmax(self.Q[i, j])) if random.uniform(0, 1) > self.epsilon else self.env.action_space.sample()
 
-    def train(self, state: np.array, action: int, new_state: np.array, reward: float):
+    def train(self, state: np.array, action: int, new_state: np.array, reward: float, done: bool):
         state_i, state_j = state.astype(int)
         new_state_i, new_state_j = new_state.astype(int)
 
         self.Q[state_i, state_j, action] *= (1 - self.learning_rate)
         self.Q[state_i, state_j, action] += self.learning_rate * (
-                    reward + self.discount_factor * np.max(self.Q[new_state_i, new_state_j]))
+                reward + self.discount_factor * np.max(self.Q[new_state_i, new_state_j]))
 
     def training_done(self, episode: int, total_reward: float):
         self.epsilon = self._get_epsilon_per_episode(episode)

@@ -11,7 +11,7 @@ class CartpoleGame(Game):
         self.agent = DeepQLearningAgent(self.env)
 
     def run(self,
-            num_episodes: int = 150,
+            num_episodes: int = 1000,
             max_epochs: int = 1000,
             verbose: bool = False
             ):
