@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyglet = "*"
+gym = {extras = ["box2d"], version = "*"}
+numpy = "*"
+notebook = "*"
+matplotlib = "*"
+highway-env = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
