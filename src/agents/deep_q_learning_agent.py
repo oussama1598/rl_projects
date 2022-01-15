@@ -68,7 +68,7 @@ class DeepQLearningAgent(Agent):
 
         sample_batch = random.sample(self.memory, 32)
 
-        for state, action, reward, next_state, done in enumerate(sample_batch):
+        for state, action, reward, next_state, done in sample_batch:
             target = reward
 
             if not done:
