@@ -2,8 +2,15 @@ import numpy as np
 
 
 class Agent:
-    def __init__(self, env):
+    def __init__(self, env, save_to: str):
         self.env = env
+        self.save_to: str = save_to
+
+    def load_model(self):
+        raise NotImplemented()
+
+    def save_model(self):
+        raise NotImplemented()
 
     def get_action(self, state: np.array):
         raise NotImplemented()

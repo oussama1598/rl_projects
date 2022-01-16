@@ -1,5 +1,5 @@
 from time import sleep
-
+import gym_maze
 import numpy as np
 
 from src.agents.q_learning_agent import QLearningAgent
@@ -10,7 +10,10 @@ class MazeGame(Game):
     def __init__(self):
         super().__init__('maze-random-10x10-plus-v0')
 
-        self.agent = QLearningAgent(self.env)
+        self.agent = QLearningAgent(
+            self.env,
+            'models/maze.pkl'
+        )
 
     def run(self,
             num_episodes: int = 150,
@@ -18,27 +21,29 @@ class MazeGame(Game):
             verbose: bool = False
             ):
         self.env.render()
+        try:
+            for episode in range(num_episodes):
+                obv = self.env.reset()
+                state, total_reward = np.array([*obv]), 0
 
-        for episode in range(num_episodes):
-            obv = self.env.reset()
-            state, total_reward = np.array([*obv]), 0
+                for t in range(max_epochs):
+                    action = self.agent.get_action(state)
+                    new_state, reward, done, _ = self.env.step(action)
+                    total_reward += reward
 
-            for t in range(max_epochs):
-                action = self.agent.get_action(state)
-                new_state, reward, done, _ = self.env.step(action)
-                total_reward += reward
+                    self.agent.train(state, action, new_state, reward, done)
 
-                self.agent.train(state, action, new_state, reward)
+                    state = np.array([*new_state])
 
-                state = np.array([*new_state])
+                    if done:
+                        if verbose:
+                            print(f'Episode {episode + 1} finished after {t} time steps with total {total_reward}')
 
-                if done:
-                    if verbose:
-                        print(f'Episode {episode + 1} finished after {t} time steps with total {total_reward}')
+                        break
 
-                    break
-
-            self.agent.training_done(episode, total_reward)
+                self.agent.training_done(episode, total_reward)
+        finally:
+            self.agent.save_model()
 
     def test(self,
              num_episodes: int = 1,

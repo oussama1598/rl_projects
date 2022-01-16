@@ -1,10 +1,8 @@
-# import gym_maze
-
 from src.games.cartpole_game import CartpoleGame
 
-# from src.games.maze_game import MazeGame
+from src.games.maze_game import MazeGame
 
-game = CartpoleGame()
+game = MazeGame()
 game.run(
     verbose=True
 )

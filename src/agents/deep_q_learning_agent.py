@@ -1,4 +1,3 @@
-import math
 import os
 import random
 from collections import deque
@@ -13,27 +12,29 @@ from src.agents.agent import Agent
 
 class DeepQLearningAgent(Agent):
     def __init__(self, env,
+                 save_to: str,
                  min_epsilon: float = 0.01,
                  min_learning_rate: float = 0.2,
                  discount_factor: float = 0.95):
-        super().__init__(env)
+        super().__init__(env, save_to)
 
         self.min_epsilon: float = min_epsilon
         self.min_learning_rate: float = min_learning_rate
         self.discount_factor: float = discount_factor
 
-        self.weight_backup = 'cartpole_weight.h5'
         self.state_size = self.env.observation_space.shape[0]
         self.action_size = self.env.action_space.n
 
         self.decay = 0.995
-        self.epsilon = self.min_epsilon
+        self.epsilon = 1.0
         self.learning_rate = 0.001
 
         self.target_update_counter = 0
 
         self.memory = deque(maxlen=2000)
         self.model = self._build_model()
+
+        self.load_model()
 
         self.rewards = []
         self.epsilons = []
@@ -45,13 +46,16 @@ class DeepQLearningAgent(Agent):
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse', optimizer=Adam(learning_rate=self.learning_rate))
 
-        if os.path.isfile(self.weight_backup):
-            model.load_weights(self.weight_backup)
-
         return model
 
+    def load_model(self):
+        if os.path.isfile(self.save_to):
+            self.model.load_weights(self.save_to)
+
+            self.epsilon = self.min_epsilon
+
     def save_model(self):
-        self.model.save(self.weight_backup)
+        self.model.save(self.save_to)
 
     def get_action(self, state: np.array):
         if random.uniform(0, 1) > self.epsilon:

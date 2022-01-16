@@ -1,4 +1,6 @@
 import math
+import os
+import pickle
 import random
 
 import numpy as np
@@ -8,10 +10,11 @@ from src.agents.agent import Agent
 
 class QLearningAgent(Agent):
     def __init__(self, env,
+                 save_to: str,
                  min_epsilon: float = 0.001,
                  min_learning_rate: float = 0.2,
                  discount_factor: float = 0.99):
-        super().__init__(env)
+        super().__init__(env, save_to)
 
         self.min_epsilon: float = min_epsilon
         self.min_learning_rate: float = min_learning_rate
@@ -27,6 +30,8 @@ class QLearningAgent(Agent):
 
         self.Q = np.zeros(self.max_size + (self.env.action_space.n,), dtype=float)
 
+        self.load_model()
+
         self.rewards = []
         self.epsilons = []
 
@@ -35,6 +40,15 @@ class QLearningAgent(Agent):
 
     def _get_learning_rate_per_episode(self, episode: int):
         return max(self.min_learning_rate, min(0.8, 1.0 - math.log10((episode + 1) / self.decay)))
+
+    def load_model(self):
+        if os.path.isfile(self.save_to):
+            with open(self.save_to, 'rb') as file:
+                self.Q = pickle.load(file)
+
+    def save_model(self):
+        with open(self.save_to, 'wb') as file:
+            pickle.dump(self.Q, file)
 
     def get_action(self, state: np.array):
         i, j = state.astype(int)

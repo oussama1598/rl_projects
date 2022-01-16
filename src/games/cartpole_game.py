@@ -8,7 +8,10 @@ class CartpoleGame(Game):
     def __init__(self):
         super().__init__('CartPole-v1')
 
-        self.agent = DeepQLearningAgent(self.env)
+        self.agent = DeepQLearningAgent(
+            self.env,
+            'models/cartpole.h5'
+        )
 
     def run(self,
             num_episodes: int = 1000,
