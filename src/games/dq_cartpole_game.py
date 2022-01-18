@@ -4,7 +4,7 @@ from src.agents.deep_q_learning_agent import DeepQLearningAgent
 from src.games.game import Game
 
 
-class CartpoleGame(Game):
+class DQCartpoleGame(Game):
     def __init__(self):
         super().__init__('CartPole-v1')
 
