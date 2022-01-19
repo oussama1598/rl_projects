@@ -7,8 +7,8 @@ from src.games.game import Game
 
 
 class MazeGame(Game):
-    def __init__(self, save_to: str = 'models/maze.pkl'):
-        super().__init__('maze-random-10x10-plus-v0')
+    def __init__(self, save_to: str = 'models/maze.pkl' , save_model: bool = True):
+        super().__init__('maze-random-10x10-plus-v0', save_model)
 
         self.agent = QLearningAgent(
             self.env,
@@ -20,7 +20,7 @@ class MazeGame(Game):
             max_epochs: int = 1000,
             verbose: bool = False
             ):
-        self.env.render()
+        #self.env.render()
         try:
             for episode in range(num_episodes):
                 obv = self.env.reset()
@@ -43,7 +43,8 @@ class MazeGame(Game):
 
                 self.agent.training_done(episode, total_reward)
         finally:
-            self.agent.save_model()
+            if self.save_model:
+                self.agent.save_model()
 
     def test(self,
              num_episodes: int = 1,

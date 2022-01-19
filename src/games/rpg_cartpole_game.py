@@ -5,8 +5,8 @@ from src.games.game import Game
 
 
 class RPGCartpoleGame(Game):
-    def __init__(self, save_to: str = 'models/maze.pkl'):
-        super().__init__('CartPole-v1')
+    def __init__(self, save_to: str = 'models/maze.pkl', save_model: bool = True):
+        super().__init__('CartPole-v1', save_model)
 
         self.agent = ReinforceAgent(
             self.env,
@@ -40,4 +40,5 @@ class RPGCartpoleGame(Game):
                     print(f'Episode {episode + 1} finished with total {total_reward}')
 
         finally:
-            self.agent.save_model()
+            if self.save_model:
+                self.agent.save_model()

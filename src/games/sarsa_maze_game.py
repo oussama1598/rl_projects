@@ -8,8 +8,8 @@ from src.games.game import Game
 
 
 class SarsaMazeGame(Game):
-    def __init__(self, save_to: str = 'models/maze.pkl'):
-        super().__init__('maze-random-10x10-plus-v0')
+    def __init__(self, save_to: str = 'models/maze.pkl', save_model: bool = True):
+        super().__init__('maze-random-10x10-plus-v0', save_model)
 
         self.agent = SarsaAgent(
             self.env,
@@ -46,7 +46,8 @@ class SarsaMazeGame(Game):
 
                 self.agent.training_done(episode, total_reward)
         finally:
-            self.agent.save_model()
+            if self.save_model:
+                self.agent.save_model()
 
     def test(self,
              num_episodes: int = 1,

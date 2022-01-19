@@ -5,8 +5,8 @@ from src.games.game import Game
 
 
 class DQCartpoleGame(Game):
-    def __init__(self, save_to: str = 'models/cartpole.h5'):
-        super().__init__('CartPole-v1')
+    def __init__(self, save_to: str = 'models/cartpole.h5', save_model: bool = True):
+        super().__init__('CartPole-v1', save_model)
 
         self.agent = DeepQLearningAgent(
             self.env,
@@ -40,4 +40,5 @@ class DQCartpoleGame(Game):
 
                 self.agent.training_done(episode, total_reward)
         finally:
-            self.agent.save_model()
+            if self.save_model:
+                self.agent.save_model()

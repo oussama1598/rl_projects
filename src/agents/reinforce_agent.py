@@ -31,6 +31,8 @@ class ReinforceAgent(Agent):
         self.probs = []
         self.discounted_rewards = []
 
+        self.episode_rewards = []
+
     def _build_model(self):
         model = Sequential()
         model.add(Dense(24, input_dim=self.state_size, activation='relu'))
@@ -100,5 +102,7 @@ class ReinforceAgent(Agent):
         history = self.model.train_on_batch(states, gradients)
 
         self.states, self.probs, self.gradients, self.rewards = [], [], [], []
+
+        self.episode_rewards.append(total_reward)
 
         return history
