@@ -5,12 +5,12 @@ from src.games.game import Game
 
 
 class RPGCartpoleGame(Game):
-    def __init__(self):
+    def __init__(self, save_to: str = 'models/maze.pkl'):
         super().__init__('CartPole-v1')
 
         self.agent = ReinforceAgent(
             self.env,
-            'models/rpg_cartpole.h5'
+            save_to
         )
 
     def run(self,

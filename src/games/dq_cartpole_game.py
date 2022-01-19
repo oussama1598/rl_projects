@@ -5,12 +5,12 @@ from src.games.game import Game
 
 
 class DQCartpoleGame(Game):
-    def __init__(self):
+    def __init__(self, save_to: str = 'models/cartpole.h5'):
         super().__init__('CartPole-v1')
 
         self.agent = DeepQLearningAgent(
             self.env,
-            'models/cartpole.h5'
+            save_to
         )
 
     def run(self,

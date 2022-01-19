@@ -7,12 +7,12 @@ from src.games.game import Game
 
 
 class MazeGame(Game):
-    def __init__(self):
+    def __init__(self, save_to: str = 'models/maze.pkl'):
         super().__init__('maze-random-10x10-plus-v0')
 
         self.agent = QLearningAgent(
             self.env,
-            'models/maze.pkl'
+            save_to
         )
 
     def run(self,
